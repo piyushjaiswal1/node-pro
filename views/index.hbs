@@ -1,0 +1,157 @@
+{{!-- <!DOCTYPE HTML>
+<html>
+<head>
+<style>
+.droptarget {
+    float: left; 
+    width: 100px; 
+    height: 35px;
+    margin: 15px;
+    padding: 10px;
+    border: 1px solid #aaaaaa;
+}
+</style>
+</head>
+<body>
+
+<p>This example uses the HTML DOM to assign "ondragstart", "ondragover" and "ondrop" events to the document object.</p>
+
+<p>Drag the p element back and forth between the two rectangles:</p>
+
+<div class="droptarget">
+  <p draggable="true" id="dragtarget"  class=".dragtarget">Drag me!</p>
+</div>
+
+<div class="droptarget"></div>
+
+<p style="clear:both;"><strong>Note:</strong> drag events are not supported in Internet Explorer 8 and earlier versions or Safari 5.1 and earlier versions.</p>
+
+<p id="demo"></p>
+
+<script>
+/* Event fired on the drag target */
+document.ondragstart = function(event) {
+    event.dataTransfer.setData("Text", event.target.id);
+    document.getElementById("demo").innerHTML = "Started to drag the p element.";
+};
+
+/* Events fired on the drop target */
+document.ondragover = function(event) {
+    event.preventDefault();
+};
+
+document.ondrop = function(event) {
+    event.preventDefault();
+    var data = event.dataTransfer.getData("Text");
+    event.target.appendChild(document.getElementById(data).cloneNode(true));
+  nodeCopy.id = "newId"; /* We cannot use the same ID */
+  ev.target.appendChild(nodeCopy);
+    document.getElementById("demo").innerHTML = "The p element was dropped";
+};
+
+</script>
+
+</body>
+</html> --}}
+
+<html>
+<head>
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 80%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+</head>
+<body>
+  
+
+
+
+<table id="end">
+     <tr>
+    <th>Brand </th>
+    <th>Model</th>
+    <th>Unit Cost</th>
+    <th>Quantity</th>
+    <th>Price</th>
+  </tr>
+
+</table >
+<table id="end">
+     <tr>
+    <th>Total</th>
+     <td><input type="text" id="final" value=0 readonly></td>
+  </tr>
+ 
+
+</table >
+
+<br/><br/>
+<hr/>
+
+
+<table id ="origin">
+  <tr>
+    <th>Brand </th>
+    <th>Model</th>
+    <th>Cost</th>
+    <th>Action</th>
+  </tr>
+
+{{#each tickets}}
+<tr id="{{_id}}">
+    <span class="{{_id}}">
+        <td>{{brand}}</td>
+        <td>{{model}}</td>
+        <td id="price-{{_id}}">{{price}}</td>
+    </span>
+ 
+    <td id="drop-{{_id}}"> <input type="button" class="drop"  value="Add" onclick="dropAndDelete({{_id}})"></td>
+    
+</tr>
+
+{{/each}}
+</table>
+
+
+<script>
+   function dropAndDelete(id){
+   var item = document.getElementById(id);
+    document.getElementById("end").appendChild(item);
+    var itemToUpdate = '<input type ="number" id=qty-'+id+' class ="update" value=0 onchange="updatePrice(this.id)" min="0">';
+    var updateTr = '<td><input type="text" id=unit-total-'+id+' class="updateUnitPrice" value=0 readonly></td>';
+    document.getElementById('drop-'+id).innerHTML = itemToUpdate;
+    var trData = document.getElementById(id).innerHTML + updateTr;
+    document.getElementById(id).innerHTML = trData;
+   }
+
+   function updatePrice(id){
+       var split_id     = id.replace('qty-','');
+       var id           = 'price-'+split_id;
+       var unitPrice    = document.getElementById(id).innerText;
+       var qty = document.getElementById('qty-'+split_id).value;
+       //update value to price col.
+        var price_per_qty = parseFloat(unitPrice)*parseFloat(qty);
+        console.log(price_per_qty);
+       document.getElementById('unit-total-'+split_id).value = price_per_qty;
+       var final = document.getElementById('final').value;
+       document.getElementById('final').value = parseFloat( final)+ parseFloat (price_per_qty);
+
+   }
+  
+    </script>
+
+</body>
+</html>
